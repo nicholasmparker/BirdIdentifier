@@ -1,6 +1,10 @@
+"""End-to-end tests for the Bird Identifier API.
+
+This module contains integration tests that verify the complete
+functionality of the API using real image data.
+"""
 import os
 
-import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -9,21 +13,22 @@ client = TestClient(app)
 
 
 def test_e2e_bird_identification():
-    """End-to-end test for bird identification using a real image"""
+    """End-to-end test for bird identification using a real image."""
     # Path to test image
     image_path = os.path.join("tests", "assets", "test_bird.jpg")
     abs_path = os.path.abspath(image_path)
     print(f"\nLooking for test image at: {abs_path}")
     print(f"Current working directory: {os.getcwd()}")
-    print(f"Directory contents:")
+    print("Directory contents:")
     print(os.listdir("tests/assets"))
 
     # Ensure the test image exists
-    assert os.path.exists(image_path), f"Test image not found at {image_path}"
+    msg = "Test image not found at " + image_path
+    assert os.path.exists(image_path), msg
 
     # Read the image file
-    with open(image_path, "rb") as f:
-        image_data = f.read()
+    with open(image_path, "rb") as image_file:
+        image_data = image_file.read()
 
     # Prepare the request
     files = {"image": ("test_bird.jpg", image_data, "image/jpeg")}

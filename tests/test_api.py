@@ -1,6 +1,10 @@
+"""API endpoint tests for the Bird Identifier service.
+
+This module contains integration tests for the FastAPI endpoints,
+testing bird identification, health checks, and species listing.
+"""
 import io
 
-import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
@@ -12,7 +16,7 @@ client = TestClient(app)
 
 @pytest.fixture
 def sample_image():
-    """Create a sample image for testing"""
+    """Create a sample image for testing."""
     # Create a simple RGB image
     img = Image.new("RGB", (224, 224), color="red")
     img_byte_arr = io.BytesIO()
@@ -22,14 +26,14 @@ def sample_image():
 
 
 def test_health_check():
-    """Test the health check endpoint"""
+    """Test the health check endpoint."""
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "healthy"}
 
 
 def test_identify_endpoint(sample_image):
-    """Test the bird identification endpoint"""
+    """Test the bird identification endpoint."""
     files = {"image": ("test.png", sample_image, "image/png")}
     params = {"threshold": 0.5, "max_results": 3}
     response = client.post("/api/v1/identify", files=files, params=params)
@@ -52,7 +56,7 @@ def test_identify_endpoint(sample_image):
 
 
 def test_identify_invalid_file():
-    """Test the endpoint with invalid file type"""
+    """Test the endpoint with invalid file type."""
     files = {"image": ("test.txt", b"not an image", "text/plain")}
     params = {"threshold": 0.5, "max_results": 3}
     response = client.post("/api/v1/identify", files=files, params=params)
@@ -60,7 +64,7 @@ def test_identify_invalid_file():
 
 
 def test_species_list():
-    """Test the species list endpoint"""
+    """Test the species list endpoint."""
     response = client.get("/api/v1/species")
     assert response.status_code == 200
 
@@ -71,7 +75,7 @@ def test_species_list():
 
 
 def test_identify_with_parameters(sample_image):
-    """Test identification with custom threshold and max_results"""
+    """Test identification with custom threshold and max_results."""
     files = {"image": ("test.png", sample_image, "image/png")}
     params = {"threshold": 0.8, "max_results": 2}
     response = client.post("/api/v1/identify", files=files, params=params)
