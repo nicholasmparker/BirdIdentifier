@@ -132,17 +132,9 @@ class MLService:
             print("Using development mode for predictions (random data)")
             import random
 
-            # Use some common bird species for development
-            dev_birds = [
-                ("Cardinalis cardinalis", "Northern Cardinal"),
-                ("Cyanocitta cristata", "Blue Jay"),
-                ("Turdus migratorius", "American Robin"),
-                ("Haemorhous mexicanus", "House Finch"),
-                ("Poecile atricapillus", "Black-capped Chickadee"),
-            ]
             predictions = []
             species = random.sample(
-                dev_birds, min(max_results, len(dev_birds))
+                self.DEV_BIRDS, min(max_results, len(self.DEV_BIRDS))
             )
             for scientific, common in species:
                 confidence = random.uniform(threshold, 1.0)
@@ -200,10 +192,27 @@ class MLService:
         except Exception as e:
             raise Exception(f"Error processing image: {str(e)}")
 
+    # Common development birds
+    DEV_BIRDS = [
+        ("Cardinalis cardinalis", "Northern Cardinal"),
+        ("Cyanocitta cristata", "Blue Jay"),
+        ("Turdus migratorius", "American Robin"),
+        ("Haemorhous mexicanus", "House Finch"),
+        ("Poecile atricapillus", "Black-capped Chickadee"),
+    ]
+
     async def get_supported_species(self) -> List[str]:
         """Get a list of all supported bird species.
 
         Returns:
             List of bird species names that can be identified by the model
         """
+        if self.classifier is None:
+            # In development mode, return our test species
+            return [common for _, common in self.DEV_BIRDS]
+
+        if self.species_list is None:
+            # In production, we should have loaded the species list
+            raise Exception("Species list not initialized")
+
         return self.species_list
