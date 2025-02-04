@@ -65,14 +65,21 @@ def test_identify_invalid_file():
 
 
 def test_species_list():
-    """Test the species list endpoint."""
+    """Test the species list endpoint in development mode."""
     response = client.get("/api/v1/species")
     assert response.status_code == 200
 
     species_list = response.json()
     assert isinstance(species_list, list)
-    assert len(species_list) > 0
-    assert all(isinstance(species, str) for species in species_list)
+    # In development mode, we expect our test species
+    expected_species = [
+        "Northern Cardinal",
+        "Blue Jay",
+        "American Robin",
+        "House Finch",
+        "Black-capped Chickadee",
+    ]
+    assert species_list == expected_species
 
 
 def test_identify_with_parameters(sample_image):
