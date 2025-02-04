@@ -22,7 +22,9 @@ class BirdPrediction(BaseModel):
     confidence: float = Field(
         ..., ge=0.0, le=1.0, description="Confidence score of the prediction"
     )
-    scientific_name: str = Field(..., description="Scientific name of the bird species")
+    scientific_name: str = Field(
+        ..., description="Scientific name of the bird species"
+    )
 
 
 class BirdResponse(BaseModel):
