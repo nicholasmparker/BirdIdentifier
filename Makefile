@@ -1,4 +1,4 @@
-.PHONY: help install test test-e2e test-all lint format run docker-build docker-up docker-down clean
+.PHONY: help install test test-e2e test-all lint format run docker-build docker-up docker-down clean pre-commit
 
 help:
 	@echo "Available commands:"
@@ -7,6 +7,7 @@ help:
 	@echo "  make test-all     Run all tests (unit + e2e)"
 	@echo "  make lint         Run linting"
 	@echo "  make format       Format code"
+	@echo "  make pre-commit   Run pre-commit checks"
 	@echo "  make run          Run development server"
 	@echo "  make docker-build Build Docker images"
 	@echo "  make docker-up    Start Docker containers"
@@ -41,6 +42,9 @@ docker-up:
 
 docker-down:
 	docker compose down
+
+pre-commit:
+	pre-commit run --all-files
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
