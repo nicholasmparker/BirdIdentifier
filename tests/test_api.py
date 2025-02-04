@@ -3,6 +3,7 @@
 This module contains integration tests for the FastAPI endpoints,
 testing bird identification, health checks, and species listing.
 """
+
 import io
 
 import pytest

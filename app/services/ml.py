@@ -50,7 +50,8 @@ class MLService:
                 file_name=settings.MODEL_PATH, use_coral=False, num_threads=4
             )
             classification_options = processor.ClassificationOptions(
-                max_results=max(3, 1),  # At least 1, but allow for more if requested
+                # At least 1, but allow for more if requested
+                max_results=max(3, 1),
                 score_threshold=0.0,  # We'll filter by threshold later
             )
             options = vision.ImageClassifierOptions(
@@ -59,7 +60,9 @@ class MLService:
             )
 
             # Create classifier
-            self.classifier = vision.ImageClassifier.create_from_options(options)
+            self.classifier = vision.ImageClassifier.create_from_options(
+                options
+            )
             print("Successfully loaded TFLite model")
         except Exception as e:
             # For development, we'll create a dummy model
@@ -73,7 +76,8 @@ class MLService:
     def _initialize_species_data(self):
         """Initialize bird species data.
 
-        Note: Not needed anymore since we use the model's display_name directly.
+        Note: Not needed anymore since we use the model's display_name
+        directly.
         """
         pass
 
@@ -137,7 +141,9 @@ class MLService:
                 ("Poecile atricapillus", "Black-capped Chickadee"),
             ]
             predictions = []
-            species = random.sample(dev_birds, min(max_results, len(dev_birds)))
+            species = random.sample(
+                dev_birds, min(max_results, len(dev_birds))
+            )
             for scientific, common in species:
                 confidence = random.uniform(threshold, 1.0)
                 predictions.append(
@@ -147,7 +153,9 @@ class MLService:
                         scientific_name=scientific,
                     )
                 )
-            return sorted(predictions, key=lambda x: x.confidence, reverse=True)
+            return sorted(
+                predictions, key=lambda x: x.confidence, reverse=True
+            )
 
         # Production prediction logic
         try:
@@ -156,17 +164,23 @@ class MLService:
 
             print("Starting TFLite inference process...")
             # Create TensorImage from numpy array
-            tensor_image = vision.TensorImage.create_from_array(processed_image)
+            tensor_image = vision.TensorImage.create_from_array(
+                processed_image
+            )
 
             # Run classification
             print("Running classification...")
             categories = self.classifier.classify(tensor_image)
-            print(f"Got {len(categories.classifications[0].categories)} categories")
+            print(
+                f"Got {len(categories.classifications[0].categories)} categories"
+            )
 
             # Process results
             results = []
             for category in categories.classifications[0].categories:
-                print(f"Category: index={category.index}, score={category.score}")
+                print(
+                    f"Category: index={category.index}, score={category.score}"
+                )
                 if (
                     category.score >= threshold and category.index != 964
                 ):  # 964 is background

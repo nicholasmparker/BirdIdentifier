@@ -3,6 +3,7 @@
 This module contains integration tests that verify the complete
 functionality of the API using real image data.
 """
+
 import os
 
 from fastapi.testclient import TestClient

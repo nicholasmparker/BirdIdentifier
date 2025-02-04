@@ -36,7 +36,9 @@ async def identify_bird(
     """
     # Validate parameters
     if not 0 <= threshold <= 1:
-        raise HTTPException(status_code=400, detail="Threshold must be between 0 and 1")
+        raise HTTPException(
+            status_code=400, detail="Threshold must be between 0 and 1"
+        )
 
     if max_results < 1:
         raise HTTPException(

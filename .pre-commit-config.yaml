@@ -11,12 +11,14 @@ repos:
     hooks:
     -   id: black
         language_version: python3.9
+        args: ["--line-length", "79"]
 
 -   repo: https://github.com/pycqa/flake8
     rev: 7.0.0
     hooks:
     -   id: flake8
         additional_dependencies: [flake8-docstrings]
+        args: ["--config=setup.cfg"]
 
 -   repo: https://github.com/pycqa/isort
     rev: 5.13.2
