@@ -5,7 +5,7 @@ This module handles image upload, bird identification, and species listing.
 
 from typing import List
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, File, HTTPException, Response, UploadFile
 
 from app.config import settings
 from app.schemas.bird import BirdResponse
@@ -13,6 +13,27 @@ from app.services.ml import MLService
 
 api_router = APIRouter()
 ml_service = MLService()
+
+
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for container monitoring.
+
+    Returns:
+        Response with 200 status if service is healthy
+    """
+    try:
+        # Verify ML service is initialized
+        if (
+            ml_service.classifier is None
+            and settings.ENVIRONMENT != "development"
+        ):
+            return Response(
+                content="ML service not initialized", status_code=503
+            )
+        return Response(status_code=200)
+    except Exception:
+        return Response(content="Service unhealthy", status_code=503)
 
 
 @api_router.post("/identify", response_model=BirdResponse)
