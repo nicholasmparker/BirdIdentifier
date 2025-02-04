@@ -37,6 +37,10 @@ class MLService:
         self._load_model()
         self._initialize_species_data()
 
+        # In development mode, initialize with test species
+        if settings.ENVIRONMENT == "development":
+            self.species_list = [common for _, common in self.DEV_BIRDS]
+
     def _load_model(self):
         """Load and initialize the TFLite model for bird classification.
 
@@ -211,8 +215,5 @@ class MLService:
             # In development mode, return our test species
             return [common for _, common in self.DEV_BIRDS]
 
-        if self.species_list is None:
-            # In production, we should have loaded the species list
-            raise Exception("Species list not initialized")
-
-        return self.species_list
+        # In production, return species list or empty list if not initialized
+        return self.species_list or []
