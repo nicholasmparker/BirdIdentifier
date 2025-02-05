@@ -19,7 +19,7 @@ WORKDIR /app
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq5 \
+    libusb-1.0-0 \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
