@@ -6,3 +6,12 @@ include = '\.pyi?$'
 [tool.isort]
 profile = "black"
 line_length = 79
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+asyncio_mode = "strict"
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]
