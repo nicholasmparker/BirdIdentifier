@@ -20,6 +20,7 @@ WORKDIR /app
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libusb-1.0-0 \
+    curl \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
