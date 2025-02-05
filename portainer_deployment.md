@@ -10,7 +10,7 @@ After the GitHub Action builds and pushes the Docker image, follow these steps t
 
    services:
      birdidentifier:
-       image: ghcr.io/your-org/birdidentifier:latest
+       image: ghcr.io/nicholasmparker/birdidentifier:latest
        environment:
          - PYTHON_ENV=production
        ports:
